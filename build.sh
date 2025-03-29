@@ -1,11 +1,16 @@
-docker build -t $JOB_NAME:$BUILD_ID .
+# Convert JOB_NAME to lowercase
+job_name_lower=$(echo "$JOB_NAME" | tr '[:upper:]' '[:lower:]')
 
-docker tag $JOB_NAME:$BUILD_ID killerbhaivg/$JOB_NAME:$BUILD_ID
+# Build the Docker image
+docker build -t $job_name_lower:$BUILD_ID .
 
-docker tag $JOB_NAME:$BUILD_ID killerbhaivg/$JOB_NAME:latest
+# Tag the image
+docker tag $job_name_lower:$BUILD_ID killerbhaivg/$job_name_lower:$BUILD_ID
+docker tag $job_name_lower:$BUILD_ID killerbhaivg/$job_name_lower:latest
 
-docker push killerbhaivg/$JOB_NAME:$BUILD_ID
+# Push the image
+docker push killerbhaivg/$job_name_lower:$BUILD_ID
+docker push killerbhaivg/$job_name_lower:latest
 
-docker push killerbhaivg/$JOB_NAME:latest
-
-docker rmi -f $JOB_NAME:$BUILD_ID killerbhaivg/$JOB_NAME:$BUILD_ID killerbhaivg/$JOB_NAME:latest
+# Remove the images
+docker rmi -f $job_name_lower:$BUILD_ID killerbhaivg/$job_name_lower:$BUILD_ID killerbhaivg/$job_name_lower:latest
